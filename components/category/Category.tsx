@@ -24,7 +24,7 @@ export default function Category(props: CategoryProps) {
   const newArray: string[] | null = [];
 
   if (data) {
-    data = data.sort((a, b) => {
+    data = data.sort((a: any, b: any) => {
       return Number(b.id) - Number(a.id);
     });
   }
@@ -57,12 +57,11 @@ export default function Category(props: CategoryProps) {
         <Styled.CategoryImage>
           <ThumbNail
             data={ThumbNailData}
-            categoryData={ThumbNailData}
             width="45.2"
             height="30.0"
             page="category"
             noAddCategory
-            updateIsPin={updateIsPin}
+            updateIsCategoryPin={updateIsPin}
             setIsProductHovered={setIsProductHovered}
           />
         </Styled.CategoryImage>

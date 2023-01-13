@@ -15,8 +15,6 @@ import {
   RecommendedIcon,
   SizeIcon,
 } from 'assets/icon';
-import DefaultImage1 from 'assets/icon';
-import DefaultImage3 from 'assets/icon';
 import Image from 'next/image';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -32,22 +30,36 @@ import ClosetEditModal from '@/components/home/ClosetEditModal';
 import DeleteCategoryModal from 'components/category/DeleteCategoryModal';
 import ModifyCategoryModal from 'components/category/ModifyCategoryModal';
 
+
 import ModalPortal from '../modal/ModalPortal';
 
 interface ThumbNailProps {
-  data?: ThumbNailData;
+  data: ThumbNailData;
   //categoryData?: ThumbNailData;
   width: string;
   height: string;
   page: string;
   noAddCategory?: boolean;
   categoryId?: string;
-  updateIsPin: ({ targetId, editBody }: UpdateClosetInput | UpdateCategoryRequest) => void;
+  updateIsPin?: ({ categoryId, targetId, editBody }: UpdateClosetInput) => void;
+  updateIsCategoryPin?: ({ targetId, editBody }: UpdateCategoryRequest) => void;
   setIsProductHovered: Dispatch<SetStateAction<boolean>>;
+  showToast?: (message: string) => void;
 }
 
 function ThumbNail(props: ThumbNailProps) {
-  const { data, width, height, noAddCategory, page, updateIsPin, categoryId, setIsProductHovered } = props;
+  const {
+    data,
+    width,
+    height,
+    noAddCategory,
+    page,
+    updateIsPin,
+    categoryId,
+    setIsProductHovered,
+    updateIsCategoryPin,
+    showToast,
+  } = props;
   const [iconHoveredTarget, setIconHoveredTarget] = useState('');
   const [imgHoveredTarget, setImgHoveredTarget] = useState('');
 
@@ -84,21 +96,24 @@ function ThumbNail(props: ThumbNailProps) {
 
   const handleOnClickPin = () => {
     if (page === 'categoryDetail') {
-      updateIsPin({
-        categoryId,
-        targetId: data.id,
-        editBody: { isInPin: !data.isInPin },
-      });
+      updateIsPin &&
+        updateIsPin({
+          categoryId,
+          targetId: data.id,
+          editBody: { isInPin: !data.isInPin },
+        });
     } else if (page === 'closet') {
-      updateIsPin({
-        targetId: data.id,
-        editBody: { isPin: !data.isPin },
-      });
+      updateIsPin &&
+        updateIsPin({
+          targetId: data.id,
+          editBody: { isPin: !data.isPin },
+        });
     } else if (page === 'category') {
-      updateIsPin({
-        targetId: data?.id,
-        editBody: { isPinCategory: !data?.isPin },
-      });
+      updateIsCategoryPin &&
+        updateIsCategoryPin({
+          targetId: data?.id,
+          editBody: { isPinCategory: !data?.isPin },
+        });
     }
   };
 
@@ -142,6 +157,7 @@ function ThumbNail(props: ThumbNailProps) {
       {/* 기본 썸네일 */}
       {page === 'category' && (
         <Styled.ThumbNailImg className={'category'} width={width} height={height}>
+          <Styled.FirstImage>
           {data.image[0] && (
             <Image
               src={data.image[0]}
@@ -150,8 +166,10 @@ function ThumbNail(props: ThumbNailProps) {
               height={300}
               placeholder="blur"
               blurDataURL="assets/icon/folder_filled.png"
+              className='image1'
             />
           )}
+          </Styled.FirstImage>
           <Styled.SeparateImages>
             {data.image[1] && (
               <Image
@@ -261,6 +279,7 @@ function ThumbNail(props: ThumbNailProps) {
                     categoryId={categoryId}
                     setIsModalOpen={setIsEditModalOpen}
                     setImgHoveredTarget={setImgHoveredTarget}
+                    showToast={showToast}
                     data={{ id: data.id, productName: data.name, size: data.size, memo: data.memo }}
                   />
                 )
@@ -281,13 +300,14 @@ function ThumbNail(props: ThumbNailProps) {
           </Styled.IconCotainer>
           {isDeleteModalOpen && (
             <ModalPortal>
-              {page === 'closet' ? (
+              {page === 'closet' && showToast ? (
                 <ClosetDeleteModal
                   productId={data.id}
                   page={page}
                   isModalOpen={isDeleteModalOpen}
                   setIsModalOpen={setIsDeleteModalOpen}
                   setImgHoveredTarget={setImgHoveredTarget}
+                  showToast={showToast}
                 />
               ) : page === 'categoryDetail' && categoryId ? (
                 <CategoryClosetDeleteModal
@@ -366,7 +386,8 @@ const Styled = {
       background-color: ${theme.colors.gray300};
       display: flex;
       & > img {
-        border-radius: 1rem;
+        border-top-right-radius: 0rem;
+        border-bottom-right-radius: 0rem;
       }
     }
   `,
@@ -441,8 +462,23 @@ const Styled = {
   SeparateImages: styled.div`
     display: flex;
     width: 22.6rem;
+    height: 30rem;
     flex-wrap: wrap;
     background-color: ${theme.colors.gray250};
-    border-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    overflow: hidden;
+    object-fit: cover;
+
   `,
+  FirstImage: styled.div`
+    width: 22.6rem;
+    height: 30rem;
+    background-color: ${theme.colors.gray250};
+    border-top-left-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    overflow: hidden;
+    object-fit: cover;
+   
+  `
 };
