@@ -13,9 +13,10 @@ import ModalPortal from '../common/modal/ModalPortal';
 interface AddCategoryModalProps {
   productId: string;
   setIsCategoryModalOpen: Dispatch<React.SetStateAction<boolean>>;
+  showToast?: (message: string) => void;
 }
 function AddCategoryModal(props: AddCategoryModalProps) {
-  const { productId, setIsCategoryModalOpen } = props;
+  const { productId, setIsCategoryModalOpen, showToast } = props;
   const [isCategoryCreateModalOpen, setIsCategoryCreateModalOpen] = useState(false);
   const [changeInputValue, setChangeInputValue] = useState('');
   const inputRef = useRef(null);
@@ -31,6 +32,7 @@ function AddCategoryModal(props: AddCategoryModalProps) {
   const handleCategoryOnClick = (categoryId: string) => {
     postIncludeCategory({ postBody: { productId: productId, categoryId: categoryId } });
     setIsCategoryModalOpen(false);
+    if (showToast) showToast('카테고리가 추가되었습니다.');
   };
 
   const onClickCategoryCreateModal = () => {
@@ -47,6 +49,7 @@ function AddCategoryModal(props: AddCategoryModalProps) {
       key={data.id}
       className={includeCategoryData?.includes(Number(data.id)) ? 'disabled' : 'abled'}
       onClick={() => handleCategoryOnClick(data.id)}
+      disabled={includeCategoryData?.includes(Number(data.id))}
     >
       <Image
         src={includeCategoryData?.includes(Number(data.id)) ? GrayFolderIcon : BlackFolderIcon}
@@ -65,13 +68,14 @@ function AddCategoryModal(props: AddCategoryModalProps) {
       <Styled.addCategoryButton onClick={onClickCategoryCreateModal}>
         <Image src={Folder20Icon} width={20} height={20} alt="카테고리 아이콘" />새 카테고리 만들기
       </Styled.addCategoryButton>
-      {isCategoryCreateModalOpen && (
+      {isCategoryCreateModalOpen && showToast && (
         <ModalPortal>
           <CategoryCreateModal
             changeInputValue={changeInputValue}
             updateInputValue={updateInputValue}
             inputRef={inputRef}
             onClickCategoryCreateModal={onClickCategoryCreateModal}
+            showToast={showToast}
           />
         </ModalPortal>
       )}

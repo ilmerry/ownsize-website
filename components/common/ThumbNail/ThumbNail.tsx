@@ -44,6 +44,7 @@ interface ThumbNailProps {
   updateIsCategoryPin?: ({ targetId, editBody }: UpdateCategoryRequest) => void;
   setIsProductHovered: Dispatch<SetStateAction<boolean>>;
   showToast?: (message: string) => void;
+  setIsCategory?: Dispatch<SetStateAction<boolean>>;
 }
 
 function ThumbNail(props: ThumbNailProps) {
@@ -58,6 +59,7 @@ function ThumbNail(props: ThumbNailProps) {
     setIsProductHovered,
     updateIsCategoryPin,
     showToast,
+    setIsCategory,
   } = props;
   const [iconHoveredTarget, setIconHoveredTarget] = useState('');
   const [imgHoveredTarget, setImgHoveredTarget] = useState('');
@@ -156,39 +158,42 @@ function ThumbNail(props: ThumbNailProps) {
       {/* 기본 썸네일 */}
       {page === 'category' && (
         <Styled.ThumbNailImg className={'category'} width={width} height={height}>
-          <Styled.FirstImage>
-            {data.image[0] && (
-              <Image
-                src={data.image[0]}
-                alt={'썸네일 이미지'}
-                width={226}
-                height={300}
-                placeholder="blur"
-                blurDataURL="assets/icon/folder_filled.png"
-                className="image1"
-              />
-            )}
-          </Styled.FirstImage>
+          {data.image[0] && (
+            <Image
+              src={data.image[0]}
+              alt={'썸네일 이미지'}
+              width={226}
+              height={300}
+              placeholder="blur"
+              blurDataURL="assets/icon/folder_filled.png"
+            />
+          )}
           <Styled.SeparateImages>
             {data.image[1] && (
-              <Image
-                src={data.image[1]}
-                alt={'썸네일 이미지'}
-                width={226}
-                height={150}
-                placeholder="blur"
-                blurDataURL="assets/icon/folder_filled.png"
-              />
+              <div>
+                <Image
+                  src={data.image[1]}
+                  alt={'썸네일 이미지'}
+                  width={226}
+                  height={150}
+                  placeholder="blur"
+                  blurDataURL="assets/icon/folder_filled.png"
+                  className="secondImage"
+                />
+              </div>
             )}
             {data.image[2] && (
-              <Image
-                src={data.image[2]}
-                alt={'썸네일 이미지'}
-                width={226}
-                height={150}
-                placeholder="blur"
-                blurDataURL="assets/icon/folder_filled.png"
-              />
+              <div>
+                <Image
+                  src={data.image[2]}
+                  alt={'썸네일 이미지'}
+                  width={226}
+                  height={150}
+                  placeholder="blur"
+                  blurDataURL="assets/icon/folder_filled.png"
+                  className="thirdImage"
+                />
+              </div>
             )}
           </Styled.SeparateImages>
         </Styled.ThumbNailImg>
@@ -210,7 +215,12 @@ function ThumbNail(props: ThumbNailProps) {
       >
         {/* 카테고리 추가 */}
         {!noAddCategory && (
-          <button onClick={() => setIsCategoryModalOpen(!isCategoryModalOpen)}>
+          <button
+            onClick={() => {
+              setIsCategoryModalOpen(!isCategoryModalOpen);
+              setIsCategory && setIsCategory(true);
+            }}
+          >
             카테고리 추가
             <Image
               src={isCategoryModalOpen ? AddCategoryCloseIcon : AddCategoryIcon}
@@ -221,7 +231,7 @@ function ThumbNail(props: ThumbNailProps) {
           </button>
         )}
         {isCategoryModalOpen && (
-          <AddCategoryModal productId={data.id} setIsCategoryModalOpen={setIsCategoryModalOpen} />
+          <AddCategoryModal productId={data.id} setIsCategoryModalOpen={setIsCategoryModalOpen} showToast={showToast} />
         )}
         {page === 'category' ? (
           <Link href={`/category/${data.id}`}>
@@ -257,7 +267,10 @@ function ThumbNail(props: ThumbNailProps) {
             <Image
               src={HoveredEditIcon}
               className={iconHoveredTarget === `Edit` ? 'show' : 'hide'}
-              onClick={() => setIsEditModalOpen(!isEditModalOpen)}
+              onClick={() => {
+                setIsEditModalOpen(!isEditModalOpen);
+                setIsCategory && setIsCategory(false);
+              }}
               width={40}
               height={40}
               alt="호버된 수정 버튼 아이콘"
@@ -266,23 +279,24 @@ function ThumbNail(props: ThumbNailProps) {
 
           {data.id && isEditModalOpen && (
             <ModalPortal>
-              {page === 'category' ? (
-                <ModifyCategoryModal
-                  onClickModifyCategoryModal={onClickModifyCategoryModal}
-                  categoryId={data.id}
-                  categoryName={data.categoryName}
-                ></ModifyCategoryModal>
-              ) : (
-                data.name && (
-                  <ClosetEditModal
-                    categoryId={categoryId}
-                    setIsModalOpen={setIsEditModalOpen}
-                    setImgHoveredTarget={setImgHoveredTarget}
-                    showToast={showToast}
-                    data={{ id: data.id, productName: data.name, size: data.size, memo: data.memo }}
-                  />
-                )
-              )}
+              {page === 'category'
+                ? showToast && (
+                    <ModifyCategoryModal
+                      onClickModifyCategoryModal={onClickModifyCategoryModal}
+                      categoryId={data.id}
+                      categoryName={data.categoryName}
+                      showToast={showToast}
+                    ></ModifyCategoryModal>
+                  )
+                : data.name && (
+                    <ClosetEditModal
+                      categoryId={categoryId}
+                      setIsModalOpen={setIsEditModalOpen}
+                      setImgHoveredTarget={setImgHoveredTarget}
+                      showToast={showToast}
+                      data={{ id: data.id, productName: data.name, size: data.size, memo: data.memo }}
+                    />
+                  )}
             </ModalPortal>
           )}
           {/* 삭제 */}
@@ -291,7 +305,10 @@ function ThumbNail(props: ThumbNailProps) {
             <Image
               src={HoveredDeleteIcon}
               className={iconHoveredTarget === `Delete` ? 'show' : 'hide'}
-              onClick={() => setIsDeleteModalOpen(!isDeleteModalOpen)}
+              onClick={() => {
+                setIsDeleteModalOpen(!isDeleteModalOpen);
+                setIsCategory && setIsCategory(false);
+              }}
               width={40}
               height={40}
               alt="호버된 삭제 버튼 아이콘"
@@ -316,12 +333,16 @@ function ThumbNail(props: ThumbNailProps) {
                   isModalOpen={isDeleteModalOpen}
                   setIsModalOpen={setIsDeleteModalOpen}
                   setImgHoveredTarget={setImgHoveredTarget}
+                  showToast={showToast}
                 />
               ) : (
-                <DeleteCategoryModal
-                  onClickDeleteCategoryModal={onClickDeleteCategoryModal}
-                  deletedCategoryId={Number(data.id)}
-                ></DeleteCategoryModal>
+                showToast && (
+                  <DeleteCategoryModal
+                    onClickDeleteCategoryModal={onClickDeleteCategoryModal}
+                    deletedCategoryId={Number(data.id)}
+                    showToast={showToast}
+                  ></DeleteCategoryModal>
+                )
               )}
             </ModalPortal>
           )}
@@ -380,13 +401,16 @@ const Styled = {
     border-radius: 1rem;
     &.closet {
       background-color: ${theme.colors.gray250};
+      & > img {
+        border-radius: 1rem;
+      }
     }
     &.category {
-      background-color: ${theme.colors.gray300};
+      background-color: ${theme.colors.gray250};
       display: flex;
       & > img {
-        border-top-right-radius: 0rem;
-        border-bottom-right-radius: 0rem;
+        border-top-left-radius: 1rem;
+        border-bottom-left-radius: 1rem;
       }
     }
   `,
@@ -461,21 +485,30 @@ const Styled = {
   SeparateImages: styled.div`
     display: flex;
     width: 22.6rem;
-    height: 30rem;
     flex-wrap: wrap;
     background-color: ${theme.colors.gray250};
-    border-top-right-radius: 1rem;
-    border-bottom-right-radius: 1rem;
-    overflow: hidden;
-    object-fit: cover;
-  `,
-  FirstImage: styled.div`
-    width: 22.6rem;
-    height: 30rem;
-    background-color: ${theme.colors.gray250};
-    border-top-left-radius: 1rem;
-    border-bottom-left-radius: 1rem;
-    overflow: hidden;
-    object-fit: cover;
+    border-radius: 1rem;
+
+    & > div {
+      position: relative;
+      width: 22.6rem;
+      height: 15rem;
+      & > img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translate(50, 50);
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        margin: auto;
+        &.secondImage {
+          border-top-right-radius: 1rem;
+        }
+        &.thirdImage {
+          border-bottom-right-radius: 1rem;
+        }
+      }
+    }
   `,
 };

@@ -13,7 +13,6 @@ import SizeForm from 'components/common/SizeForm/SizeForm';
 import { Toast } from 'components/common/Toast/Toast';
 import useToast from 'components/common/Toast/useToast';
 
-
 export default function Mysize() {
   const { allMysize } = useFetchMysize();
   const [isAlertActive, setIsAlertActive] = useState(false);
@@ -62,7 +61,6 @@ export default function Mysize() {
     const shoulder = top?.shoulder;
     const chest = top?.chest;
     const isWidthOfTop = top?.isWidthOfTop;
-    console.log(isWidthOfTop);
     const bottomLength = bottom?.bottomLength;
     const rise = bottom?.rise;
     const waist = bottom?.waist;
@@ -176,7 +174,7 @@ export default function Mysize() {
       ) : null}
       {isOpenToast && (
         <Styled.ToastContainer>
-          <Toast message={message} />
+          <Toast message={message} width='32.9' />
         </Styled.ToastContainer>
       )}
     </Styled.Root>
