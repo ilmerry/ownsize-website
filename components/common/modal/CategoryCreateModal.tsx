@@ -5,23 +5,22 @@ import theme from 'styles/theme';
 
 import Modal from 'components/common/Modal';
 
-import ModalPortal from './ModalPortal';
-import useToast from '../Toast/useToast';
 import { Toast } from '../Toast/Toast';
+import useToast from '../Toast/useToast';
+
+import ModalPortal from './ModalPortal';
 
 type CategoryCreateModalProps = {
   changeInputValue: string;
   updateInputValue: (input: string) => void;
   inputRef: React.RefObject<HTMLInputElement>;
   onClickCategoryCreateModal: () => void;
-  showToast: (message:string) => void;
+  showToast: (message: string) => void;
 };
 export default function CategoryCreateModal(props: CategoryCreateModalProps) {
   const { changeInputValue, updateInputValue, inputRef, onClickCategoryCreateModal, showToast } = props;
   const { mutate } = usePostCategory(); // hook 은 늘 상위에 두자..! 안 그러면 more rendered 에러 남.
   const [isButtonActivated, setIsButtonActivated] = useState(false);
-
-
 
   const onClickCancel = () => {
     onClickCategoryCreateModal();
@@ -32,7 +31,7 @@ export default function CategoryCreateModal(props: CategoryCreateModalProps) {
       onClickCategoryCreateModal();
       setIsButtonActivated(false);
       updateInputValue('');
-      showToast('카테고리가 생성되었습니다.')
+      showToast('카테고리가 생성되었습니다.');
     }
   };
 
@@ -116,12 +115,12 @@ const Styled = {
     }
   `,
   ToastContainer: styled.div`
-  position: fixed;
-  bottom: 5.2rem;
+    position: fixed;
+    bottom: 5.2rem;
 
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 
-  margin-left:  53.9rem;`
-,
+    margin-left: 53.9rem;
+  `,
 };
