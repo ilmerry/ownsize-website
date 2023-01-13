@@ -30,7 +30,6 @@ import ClosetEditModal from '@/components/home/ClosetEditModal';
 import DeleteCategoryModal from 'components/category/DeleteCategoryModal';
 import ModifyCategoryModal from 'components/category/ModifyCategoryModal';
 
-
 import ModalPortal from '../modal/ModalPortal';
 
 interface ThumbNailProps {
@@ -158,17 +157,17 @@ function ThumbNail(props: ThumbNailProps) {
       {page === 'category' && (
         <Styled.ThumbNailImg className={'category'} width={width} height={height}>
           <Styled.FirstImage>
-          {data.image[0] && (
-            <Image
-              src={data.image[0]}
-              alt={'썸네일 이미지'}
-              width={226}
-              height={300}
-              placeholder="blur"
-              blurDataURL="assets/icon/folder_filled.png"
-              className='image1'
-            />
-          )}
+            {data.image[0] && (
+              <Image
+                src={data.image[0]}
+                alt={'썸네일 이미지'}
+                width={226}
+                height={300}
+                placeholder="blur"
+                blurDataURL="assets/icon/folder_filled.png"
+                className="image1"
+              />
+            )}
           </Styled.FirstImage>
           <Styled.SeparateImages>
             {data.image[1] && (
@@ -469,7 +468,6 @@ const Styled = {
     border-bottom-right-radius: 1rem;
     overflow: hidden;
     object-fit: cover;
-
   `,
   FirstImage: styled.div`
     width: 22.6rem;
@@ -479,6 +477,5 @@ const Styled = {
     border-bottom-left-radius: 1rem;
     overflow: hidden;
     object-fit: cover;
-   
-  `
+  `,
 };

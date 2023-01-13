@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from 'react';
 import { usePostCategory } from 'hooks/queries/category';
-import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
 import theme from 'styles/theme';
 
@@ -41,13 +41,13 @@ export default function CategoryCreateModal(props: CategoryCreateModalProps) {
   };
 
   useEffect(() => {
-    if (changeInputValue.length > 0){
+    if (changeInputValue.length > 0) {
       setIsButtonActivated(true);
       console.log(changeInputValue);
     } else {
       setIsButtonActivated(false);
     }
-  }, [changeInputValue])
+  }, [changeInputValue]);
 
   return (
     <ModalPortal>
