@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import profileDefault from 'assets/icon/profileDefault.svg';
+import profileDefault from 'assets/icon/profileDefault.png';
 import sizeReplacement from 'assets/icon/sizeReplacement.png';
 import Image from 'next/image';
 import styled from 'styled-components';
@@ -16,7 +16,6 @@ function MyPageMain() {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const [isButtonActivated, setIsButtonActivated] = useState(true);
-
 
   const onClickHistoryModal = () => {
     setIsHistoryModalOpen(!isHistoryModalOpen);
@@ -44,7 +43,7 @@ function MyPageMain() {
             width={82}
             height={82}
             placeholder="blur"
-            blurDataURL="assets/icon/profileDefault.svg"
+            blurDataURL="assets/icon/profileDefault.png"
           />
           <Styled.UserInformation>
             {userInformation && userInformation.name} <div>{userInformation && userInformation.email}</div>
