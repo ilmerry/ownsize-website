@@ -18,7 +18,6 @@ import Category from './Category';
 
 export default function CategoryMain() {
   let { category } = useFetchAllCategory();
-  console.log(category);
 
   const [isCategoryCreateModalOpen, setIsCategoryCreateModalOpen] = useState(false);
   const [changeInputValue, setChangeInputValue] = useState('');
@@ -205,6 +204,7 @@ const Styled = {
     padding-top: 9.5rem;
     margin: 0 auto;
     text-align: center;
+    padding-bottom: 34.1rem;
     & > p {
       margin-top: 4rem;
     }
@@ -215,7 +215,7 @@ const Styled = {
   ToastContainer: styled.div`
     position: fixed;
     bottom: 5.2rem;
-
+    z-index: 15;
     display: flex;
     align-items: center;
     margin-left: 50.4rem;

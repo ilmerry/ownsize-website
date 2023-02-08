@@ -29,6 +29,7 @@ function Login() {
         } else {
           router.push('/register');
         }
+        router.push('/register');
       });
     },
   });
@@ -40,22 +41,7 @@ function Login() {
       setPage((prev) => (prev === lottieMapper.length - 1 ? 0 : prev + 1));
     }
   };
-  const { userId, token, isRegister, isLoading, setIsLoading, getLocalStorage } = useRedirect({
-    onRedirect: () => {
-      if (isRegister === 'true') {
-        router.push('/home');
-      } else if (userId && token) {
-        router.push('/register');
-      } else {
-        // login
-        setIsLoading(false);
-      }
-    },
-  });
-
-  useEffect(() => {
-    getLocalStorage();
-  }, []);
+  const { isLoading } = useRedirect();
 
   return (
     <Layout noHeader noMenuBar noFooter>
@@ -87,6 +73,7 @@ const Styled = {
   Root: styled.section`
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
     width: 100vw;
     height: 100vh;
@@ -104,7 +91,7 @@ const Styled = {
   LoginButton: styled.button`
     width: 69.2rem;
     height: 7.2rem;
-    margin-top: 14.6rem;
+    margin-top: 3.8rem;
     border: 0;
     background: transparent;
     cursor: pointer;

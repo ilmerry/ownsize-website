@@ -26,7 +26,9 @@ interface FormProps {
   skip?: boolean;
   setSkip?: (prev: boolean) => void;
   onClickMeasure?: (measure: string) => void;
-  data?: { 총장: number; '어깨 너비': number; 가슴: number } | { 총장: number; 밑위: number; 허리: number; 허벅지: number; 밑단: number };
+  data?:
+    | { 총장: number; '어깨 너비': number; 가슴: number }
+    | { 총장: number; 밑위: number; 허리: number; 허벅지: number; 밑단: number };
 }
 
 // 상의 총장, 어깨너비
@@ -108,7 +110,6 @@ export default function SizeForm(props: FormProps) {
   } = props;
   const [measure, setMeasure] = useState<'단면' | '둘레'>('단면');
 
-  
   const {
     register,
     setValue,
@@ -118,6 +119,7 @@ export default function SizeForm(props: FormProps) {
     resetField,
   } = useForm<FieldValues>({
     shouldFocusError: false,
+    defaultValues: data,
   });
 
   const { postMyTopSize } = usePostMyTopSize();
@@ -173,14 +175,17 @@ export default function SizeForm(props: FormProps) {
 
   useEffect(() => {
     watch((formObject) => {
-      // input이 다 채워졌으면 다음 버튼 활성화
       if (!Object.values(formObject).includes('')) {
-        setIsSubmitActive && setIsSubmitActive(true);
-      }
-
-      // 하나라도 입력했다면 스킵 못함
-      if (Object.values(formObject).filter((value) => value !== undefined && value !== '')) {
+        // input이 다 채워졌으면 다음 버튼 활성화
         setSkip && setSkip(false);
+        setIsSubmitActive && setIsSubmitActive(true);
+      } else if (Object.values(formObject).filter((value) => value !== undefined && value !== '').length) {
+        // 하나라도 입력했다면 스킵 못함
+        setSkip && setSkip(false);
+        setIsSubmitActive && setIsSubmitActive(false);
+      } else {
+        setSkip && setSkip(false);
+        setIsSubmitActive && setIsSubmitActive(true);
       }
     });
   }, [watch]);

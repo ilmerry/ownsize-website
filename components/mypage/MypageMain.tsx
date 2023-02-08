@@ -140,7 +140,7 @@ export default MyPageMain;
 const Styled = {
   Root: styled.div`
     width: 100vw;
-    height: 100vh;
+    height: 85.1rem;
     background-color: ${theme.colors.lightGrey};
     padding-bottom: 12.2rem;
   `,
