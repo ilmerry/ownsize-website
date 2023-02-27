@@ -1,5 +1,4 @@
 import { lazy, Suspense, useState } from 'react';
-import profileDefault from 'assets/icon/profileDefault.svg';
 import sizeReplacement from 'assets/icon/sizeReplacement.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -9,6 +8,7 @@ import styled from 'styled-components';
 import theme from 'styles/theme';
 
 import { postLogoutData, postWithDrawData } from '@/apis/user';
+import { profileDefault } from '@/assets/icon';
 import Modal from 'components/common/Modal';
 import ModalPortal from 'components/common/modal/ModalPortal';
 
