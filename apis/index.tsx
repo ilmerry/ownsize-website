@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { PropsWithChildren, useEffect } from 'react';
 import axios, { AxiosRequestConfig } from 'axios';
 import { useRouter } from 'next/router';
