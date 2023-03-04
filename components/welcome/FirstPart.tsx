@@ -61,7 +61,7 @@ function FirstPart() {
           onMouseLeave={() => setIsHovered(false)}
           target="_blank"
         >
-          <Image src={chromeWebStoreIcon} alt="크롬 웹스토어 아이콘" width={36} height={34} />
+          <Image src={chromeWebStoreIcon} alt="크롬 웹스토어 아이콘" width={36} height={34} priority />
           Chrome 웹스토어 바로가기
         </Link>
 
@@ -241,7 +241,7 @@ const Styled = {
 
     @media (min-width: 601px) and (max-width: 1054px) {
       width: 60rem;
-      top: 64.9rem;
+      top: 62.9rem;
 
       text-align: center;
 

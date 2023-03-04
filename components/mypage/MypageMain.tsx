@@ -2,8 +2,8 @@ import { lazy, Suspense, useState } from 'react';
 import sizeReplacement from 'assets/icon/sizeReplacement.png';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useResetRecoilState } from 'recoil';
-import { tokenState } from 'states/user';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import { isAlreadyUserState, tokenState } from 'states/user';
 import styled from 'styled-components';
 import theme from 'styles/theme';
 
@@ -20,11 +20,13 @@ function MyPageMain() {
   const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const [isButtonActivated, setIsButtonActivated] = useState(true);
+  const [, setUserState] = useRecoilState(isAlreadyUserState);
 
   const onClickHistoryModal = () => {
     setIsHistoryModalOpen(!isHistoryModalOpen);
   };
   const onClickLeaveModal = () => {
+    setUserState('pending');
     setIsLeaveModalOpen(!isLeaveModalOpen);
   };
   const onClickCancel = () => {
