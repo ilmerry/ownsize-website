@@ -14,7 +14,7 @@ jobs:
       - name: Merge upstream
         run: |
           git config --global user.name 'ilmerry'
-          git config --global user.email 'ilmerry@gmail.com'
+          git config --global user.email 'milkiss0414@gmail.com'
           # "git checkout master" is unnecessary, already here by default
           git pull --unshallow  # this option is very important, you would get
                                 # complains about unrelated histories without it.
